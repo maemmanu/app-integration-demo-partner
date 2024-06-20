@@ -29,7 +29,7 @@ steps:
       export PATH=/builder/home/.integrationcli/bin
       
       integrationcli token cache --metadata-token
-      integrationcli integrations apply -f . -p $PROJECT_ID -r $LOCATION --metadata-token --skip-connectors
+      integrationcli integrations create /workspace/src/mae-crud.json -f . -p $PROJECT_ID -r $LOCATION --metadata-token --skip-connectors
 
 #the name of the service account  to use when setting up the connector
 substitutions:
