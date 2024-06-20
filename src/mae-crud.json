@@ -1,0 +1,567 @@
+{
+	"description": "Veolia Demo 2023",
+	"snapshotNumber": "25",
+	"triggerConfigs": [
+		{
+			"label": "API Trigger",
+			"triggerType": "API",
+			"triggerNumber": "1",
+			"triggerId": "api_trigger/veolia-bqcrud_API_1",
+			"startTasks": [
+				{
+					"taskId": "21"
+				}
+			],
+			"properties": {
+				"Trigger name": "veolia-bqcrud_API_1"
+			}
+		},
+		{
+			"label": "Cloud Pub/Sub Trigger",
+			"triggerType": "CLOUD_PUBSUB_EXTERNAL",
+			"triggerNumber": "2",
+			"triggerId": "cloud_pubsub_external_trigger/projects/cloud-crm-eventbus-cpsexternal/subscriptions/bap-emea-apigee-5_mae-test",
+			"startTasks": [
+				{
+					"taskId": "22"
+				}
+			],
+			"properties": {
+				"IP Project name": "cloud-crm-eventbus-cpsexternal",
+				"Subscription name": "bap-emea-apigee-5_mae-test"
+			}
+		}
+	],
+	"taskConfigs": [
+		{
+			"task": "FieldMappingTask",
+			"taskId": "10",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$InputJson.filterQuery$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_20_filterClause`$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Map for Delete",
+			"nextTasks": [
+				{
+					"taskId": "20"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ANY_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "FieldMappingTask",
+			"taskId": "13",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$InputJson.consumers$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_18_connectorInputPayload`$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$InputJson.filterQuery$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_18_filterClause`$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Map for Update (PUT)",
+			"nextTasks": [
+				{
+					"taskId": "18"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ANY_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "FieldMappingTask",
+			"taskId": "15",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$InputJson.consumers$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_19_connectorInputPayload`$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Map for Insert (POST)",
+			"nextTasks": [
+				{
+					"taskId": "19"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ANY_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "16",
+			"parameters": {
+				"config": {
+					"key": "config",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.connectors.GenericConnectorTaskConfig\",\n  \"connection\": {\n    \"connectionName\": \"projects/bap-emea-apigee-5/locations/europe-west1/connections/mae-bq-dataset\",\n    \"serviceName\": \"projects/rda9173c8292491d5-tp/locations/europe-west1/namespaces/connectors/services/runtime\",\n    \"connectorVersion\": \"projects/bap-emea-apigee-5/locations/global/providers/gcp/connectors/bigquery/versions/1\"\n  },\n  \"operation\": \"LIST_ENTITIES\"\n}"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_16_connectorOutputPayload`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "consumers"
+					}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": "$`Task_16_filterClause`$"
+					}
+				},
+				"listEntitiesNextPageToken": {
+					"key": "listEntitiesNextPageToken",
+					"value": {
+						"stringValue": "$`Task_16_listEntitiesNextPageToken`$"
+					}
+				},
+				"listEntitiesPageSize": {
+					"key": "listEntitiesPageSize",
+					"value": {
+						"stringValue": "$`Task_16_listEntitiesPageSize`$"
+					}
+				},
+				"listEntitiesPageToken": {
+					"key": "listEntitiesPageToken",
+					"value": {
+						"stringValue": "$`Task_16_listEntitiesPageToken`$"
+					}
+				},
+				"listEntitiesSortByColumns": {
+					"key": "listEntitiesSortByColumns",
+					"value": {
+						"stringValue": "$`Task_16_listEntitiesSortByColumns`$"
+					}
+				}
+			},
+			"displayName": "BQ List",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "18",
+			"parameters": {
+				"config": {
+					"key": "config",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.connectors.GenericConnectorTaskConfig\",\n  \"connection\": {\n    \"connectionName\": \"projects/bap-emea-apigee-5/locations/europe-west1/connections/mae-bq-dataset\",\n    \"serviceName\": \"projects/rda9173c8292491d5-tp/locations/europe-west1/namespaces/connectors/services/runtime\",\n    \"connectorVersion\": \"projects/bap-emea-apigee-5/locations/global/providers/gcp/connectors/bigquery/versions/1\"\n  },\n  \"operation\": \"UPDATE_ENTITY\"\n}"
+					}
+				},
+				"connectorInputPayload": {
+					"key": "connectorInputPayload",
+					"value": {
+						"stringValue": "$`Task_18_connectorInputPayload`$"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_18_connectorOutputPayload`$"
+					}
+				},
+				"entityId": {
+					"key": "entityId",
+					"value": {
+						"stringValue": "$`Task_18_entityId`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "consumers"
+					}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": "$`Task_18_filterClause`$"
+					}
+				}
+			},
+			"displayName": "BQ Update",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "19",
+			"parameters": {
+				"config": {
+					"key": "config",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.connectors.GenericConnectorTaskConfig\",\n  \"connection\": {\n    \"connectionName\": \"projects/bap-emea-apigee-5/locations/europe-west1/connections/mae-bq-dataset\",\n    \"serviceName\": \"projects/rda9173c8292491d5-tp/locations/europe-west1/namespaces/connectors/services/runtime\",\n    \"connectorVersion\": \"projects/bap-emea-apigee-5/locations/global/providers/gcp/connectors/bigquery/versions/1\"\n  },\n  \"operation\": \"CREATE_ENTITY\"\n}"
+					}
+				},
+				"connectorInputPayload": {
+					"key": "connectorInputPayload",
+					"value": {
+						"stringValue": "$`Task_19_connectorInputPayload`$"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_19_connectorOutputPayload`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "consumers"
+					}
+				}
+			},
+			"displayName": "BQ Add Row",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "20",
+			"parameters": {
+				"config": {
+					"key": "config",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.connectors.GenericConnectorTaskConfig\",\n  \"connection\": {\n    \"connectionName\": \"projects/bap-emea-apigee-5/locations/europe-west1/connections/mae-bq-dataset\",\n    \"serviceName\": \"projects/rda9173c8292491d5-tp/locations/europe-west1/namespaces/connectors/services/runtime\",\n    \"connectorVersion\": \"projects/bap-emea-apigee-5/locations/global/providers/gcp/connectors/bigquery/versions/1\"\n  },\n  \"operation\": \"DELETE_ENTITY\"\n}"
+					}
+				},
+				"entityId": {
+					"key": "entityId",
+					"value": {
+						"stringValue": "$`Task_20_entityId`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "consumers"
+					}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": "$`Task_20_filterClause`$"
+					}
+				}
+			},
+			"displayName": "BQ Delete",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "FieldMappingTask",
+			"taskId": "21",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$InputJson$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"operation\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$Operation$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Data Mapping",
+			"nextTasks": [
+				{
+					"taskId": "10",
+					"condition": "$Operation$ = DELETE",
+					"displayName": "DELETE"
+				},
+				{
+					"taskId": "15",
+					"condition": "$Operation$ = POST",
+					"displayName": "POST"
+				},
+				{
+					"taskId": "13",
+					"condition": "$Operation$ = PUT",
+					"displayName": "PUT"
+				},
+				{
+					"taskId": "7",
+					"condition": "$Operation$ = LIST AND $InputJson.filterQuery$ != \"\"",
+					"displayName": "LIST"
+				},
+				{
+					"taskId": "23",
+					"condition": "$Operation$ = LIST AND $InputJson.filterQuery$ = \"\"",
+					"displayName": "LISTALL"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "FieldMappingTask",
+			"taskId": "22",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$CloudPubSubMessage.data$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$InputJson$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Pub/Sub message mapping",
+			"nextTasks": [
+				{
+					"taskId": "21"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "GenericConnectorTask",
+			"taskId": "23",
+			"parameters": {
+				"config": {
+					"key": "config",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.connectors.GenericConnectorTaskConfig\",\n  \"connection\": {\n    \"connectionName\": \"projects/bap-emea-apigee-5/locations/europe-west1/connections/mae-bq-dataset\",\n    \"serviceName\": \"projects/rda9173c8292491d5-tp/locations/europe-west1/namespaces/connectors/services/runtime\",\n    \"connectorVersion\": \"projects/bap-emea-apigee-5/locations/global/providers/gcp/connectors/bigquery/versions/1\"\n  },\n  \"operation\": \"LIST_ENTITIES\"\n}"
+					}
+				},
+				"connectorOutputPayload": {
+					"key": "connectorOutputPayload",
+					"value": {
+						"stringValue": "$`Task_23_connectorOutputPayload`$"
+					}
+				},
+				"entityType": {
+					"key": "entityType",
+					"value": {
+						"stringValue": "consumers"
+					}
+				},
+				"filterClause": {
+					"key": "filterClause",
+					"value": {
+						"stringValue": "$`Task_23_filterClause`$"
+					}
+				},
+				"listEntitiesNextPageToken": {
+					"key": "listEntitiesNextPageToken",
+					"value": {
+						"stringValue": "$`Task_23_listEntitiesNextPageToken`$"
+					}
+				},
+				"listEntitiesPageSize": {
+					"key": "listEntitiesPageSize",
+					"value": {
+						"stringValue": "$`Task_23_listEntitiesPageSize`$"
+					}
+				},
+				"listEntitiesPageToken": {
+					"key": "listEntitiesPageToken",
+					"value": {
+						"stringValue": "$`Task_23_listEntitiesPageToken`$"
+					}
+				},
+				"listEntitiesSortByColumns": {
+					"key": "listEntitiesSortByColumns",
+					"value": {
+						"stringValue": "$`Task_23_listEntitiesSortByColumns`$"
+					}
+				}
+			},
+			"displayName": "BQ List All ",
+			"taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		},
+		{
+			"task": "FieldMappingTask",
+			"taskId": "7",
+			"parameters": {
+				"FieldMappingConfigTaskParameterKey": {
+					"key": "FieldMappingConfigTaskParameterKey",
+					"value": {
+						"jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$InputJson.filterQuery$\"\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$`Task_16_filterClause`$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+					}
+				}
+			},
+			"displayName": "Map for LIST",
+			"nextTasks": [
+				{
+					"taskId": "16"
+				}
+			],
+			"taskExecutionStrategy": "WHEN_ANY_SUCCEED",
+			"externalTaskType": "NORMAL_TASK"
+		}
+	],
+	"integrationParameters": [
+		{
+			"key": "Operation",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": "POST"
+			},
+			"searchable": true
+		},
+		{
+			"key": "entityId",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			}
+		},
+		{
+			"key": "filterQuery",
+			"dataType": "STRING_VALUE",
+			"defaultValue": {
+				"stringValue": ""
+			}
+		},
+		{
+			"key": "CloudPubSubMessage",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"producer": "2_2",
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"title\": \"Cloud Pub/Sub Message\",\n  \"description\": \"Message received by Cloud Pub/Sub.\",\n  \"properties\": {\n    \"data\": {\n      \"type\": \"string\",\n      \"description\": \"The message data sent by the publisher\"\n    },\n    \"attributes\": {\n      \"type\": \"object\",\n      \"description\": \"Attributes for this message\"\n    },\n    \"messageId\": {\n      \"type\": \"string\",\n      \"description\": \"ID of this message, assigned by the server when the message is published. Guaranteed to be unique within the topic.\"\n    },\n    \"publishTime\": {\n      \"type\": \"string\",\n      \"description\": \"The time at which the message was published, populated by the server when it receives the topics.publish call\"\n    },\n    \"orderingKey\": {\n      \"type\": \"string\",\n      \"description\": \"Identifies related messages for which publish order should be respected.\"\n    }\n  }\n}"
+		},
+		{
+			"key": "consumers",
+			"dataType": "JSON_VALUE",
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"hostname\": {\n      \"type\": \"string\"\n    },\n    \"consumerId\": {\n      \"type\": \"string\"\n    },\n    \"adminEmail\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+		},
+		{
+			"key": "`Task_23_listEntitiesPageSize`",
+			"dataType": "INT_VALUE",
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_listEntitiesPageToken`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_listEntitiesSortByColumns`",
+			"dataType": "STRING_ARRAY",
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_filterClause`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_listEntitiesNextPageToken`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"inputOutputType": "OUT",
+			"producer": "1_23",
+			"jsonSchema": "{\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"hostname\": {\n        \"type\": [\"string\", \"null\"],\n        \"readOnly\": false\n      },\n      \"consumerId\": {\n        \"type\": [\"string\", \"null\"],\n        \"readOnly\": false\n      },\n      \"adminEmail\": {\n        \"type\": [\"string\", \"null\"],\n        \"readOnly\": false\n      },\n      \"topicId\": {\n        \"type\": [\"string\", \"null\"],\n        \"readOnly\": false\n      }\n    }\n  }\n}"
+		},
+		{
+			"key": "`Task_18_connectorInputPayload`",
+			"dataType": "JSON_VALUE",
+			"producer": "1_18",
+			"jsonSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"hostname\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"consumerId\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"adminEmail\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"topicId\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"apiKey\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    }\n  }\n}"
+		},
+		{
+			"key": "`Task_18_entityId`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_18"
+		},
+		{
+			"key": "`Task_18_filterClause`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_18"
+		},
+		{
+			"key": "`Task_19_connectorInputPayload`",
+			"dataType": "JSON_VALUE",
+			"producer": "1_19",
+			"jsonSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"hostname\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"consumerId\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"adminEmail\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"topicId\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    },\n    \"apiKey\": {\n      \"type\": [\"string\", \"null\"],\n      \"readOnly\": false\n    }\n  }\n}"
+		},
+		{
+			"key": "`Task_20_entityId`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_20"
+		},
+		{
+			"key": "`Task_20_filterClause`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_20"
+		},
+		{
+			"key": "`Task_18_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"inputOutputType": "OUT",
+			"producer": "1_18"
+		},
+		{
+			"key": "`Task_19_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"inputOutputType": "OUT",
+			"producer": "1_19"
+		},
+		{
+			"key": "InputJson",
+			"dataType": "JSON_VALUE",
+			"defaultValue": {
+				"jsonValue": "{\n  \"operation\": \"LIST\",\n  \"filterQuery\": \"topicId \\u003d \\u00272\\u0027 \",\n  \"consumers\": {\n    \"hostname\": \"test\",\n    \"consumerId\": \"test\",\n    \"adminEmail\": \"test\",\n    \"topicId\": \"test\"\n  }\n}"
+			},
+			"inputOutputType": "IN",
+			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"consumers\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"hostname\": {\n          \"type\": \"string\"\n        },\n        \"topicId\": {\n          \"type\": \"string\"\n        },\n        \"apiKey\": {\n          \"type\": \"string\"\n        },\n        \"consumerId\": {\n          \"type\": \"string\"\n        },\n        \"adminEmail\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"operation\": {\n      \"type\": \"string\"\n    },\n    \"filterQuery\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+		},
+		{
+			"key": "`Task_16_listEntitiesPageSize`",
+			"dataType": "INT_VALUE",
+			"producer": "1_16"
+		},
+		{
+			"key": "`Task_16_listEntitiesPageToken`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_16"
+		},
+		{
+			"key": "`Task_16_listEntitiesSortByColumns`",
+			"dataType": "STRING_ARRAY",
+			"producer": "1_16"
+		},
+		{
+			"key": "`Task_16_filterClause`",
+			"dataType": "STRING_VALUE",
+			"producer": "1_16"
+		},
+		{
+			"key": "`Task_16_connectorOutputPayload`",
+			"dataType": "JSON_VALUE",
+			"isTransient": true,
+			"producer": "1_16",
+			"jsonSchema": "{\n  \"type\": [\"array\"],\n  \"items\": {\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n    \"type\": \"object\",\n    \"properties\": {\n      \"hostname\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"consumerId\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"adminEmail\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"topicId\": {\n        \"type\": [\"string\", \"null\"]\n      },\n      \"apiKey\": {\n        \"type\": [\"string\", \"null\"]\n      }\n    }\n  },\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}"
+		},
+		{
+			"key": "`Task_16_listEntitiesNextPageToken`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_16"
+		}
+	],
+	"databasePersistencePolicy": "",
+	"cloudLoggingDetails": {
+		"cloudLoggingSeverity": "",
+		"enableCloudLogging": false
+	}
+}

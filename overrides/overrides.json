@@ -1,0 +1,54 @@
+{
+	"trigger_overrides": [
+		{
+			"triggerNumber": "2",
+			"projectId": "bap-emea-apigee-5",
+			"topicName": "mae-test"
+		}
+	],
+	"connection_overrides": [
+		{
+			"taskId": "16",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "mae-bq-dataset"
+			}
+		},
+		{
+			"taskId": "18",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "mae-bq-dataset"
+			}
+		},
+		{
+			"taskId": "19",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "mae-bq-dataset"
+			}
+		},
+		{
+			"taskId": "20",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "mae-bq-dataset"
+			}
+		},
+		{
+			"taskId": "23",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "mae-bq-dataset"
+			}
+		}
+	],
+	"integration_overrides": {
+		"databasePersistencePolicy": "DATABASE_PERSISTENCE_POLICY_UNSPECIFIED",
+		"enableVariableMasking": false,
+		"cloudLoggingDetails": {
+			"cloudLoggingSeverity": "CLOUD_LOGGING_SEVERITY_UNSPECIFIED",
+			"enableCloudLogging": false
+		}
+	}
+}
