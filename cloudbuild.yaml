@@ -8,8 +8,8 @@ steps:
     - .
     - -u
     - ${SHORT_SHA}
-    - --wait=${_WAIT}
-    - --reg=${_LOCATION}
+    #- --wait=${_WAIT}
+    - --reg=europe-west1
     - --proj=${PROJECT_ID}
     - --metadata-token
     - $(cat /tmp/cmd)
