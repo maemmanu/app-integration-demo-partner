@@ -48,7 +48,8 @@
 		"enableVariableMasking": false,
 		"cloudLoggingDetails": {
 			"cloudLoggingSeverity": "CLOUD_LOGGING_SEVERITY_UNSPECIFIED",
-			"enableCloudLogging": true
+			"enableCloudLogging": true,
+			"cloudLoggingSeverity": "INFO"
 		}
 	}
 }
