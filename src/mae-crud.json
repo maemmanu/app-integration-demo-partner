@@ -576,6 +576,6 @@
 	"databasePersistencePolicy": "",
 	"cloudLoggingDetails": {
 		"cloudLoggingSeverity": "",
-		"enableCloudLogging": true
+		"enableCloudLogging": false
 	}
 }
