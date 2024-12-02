@@ -575,7 +575,7 @@
 	"userLabel": "Latest",
 	"databasePersistencePolicy": "",
 	"cloudLoggingDetails": {
-		"cloudLoggingSeverity": "",
-		"enableCloudLogging": false
+		"cloudLoggingSeverity": "INFO",
+		"enableCloudLogging": true
 	}
 }
